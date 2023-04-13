@@ -7,6 +7,15 @@ function App() {
   const [breakTime, setBreakTime] = React.useState(5 * 60);
   const [sessionTime, setSessionTime] = React.useState(25 * 60);
   const [timerOn, setTimerOn] = React.useState(false);
+  const [onBreak, setOnBreak] = React.useState(false);
+  const [breakAudio, setBreakAudio] = React.useState(
+    new Audio("./BeepSound.mp3")
+  );
+
+  const playBreakSound = () => {
+    breakAudio.currentTime = 0;
+    breakAudio.play();
+  };
   const formatTime = (time) => {
     let minutes = Math.floor(time / 60);
     let seconds = time % 60;
@@ -31,6 +40,35 @@ function App() {
     }
   };
 
+  const controlTime = () => {
+    let second = 1000;
+    let date = new Date.getTime();
+    let nextDate = new Date.getTime() + second;
+    let onBreakVariable = onBreak;
+    if (!timerOn) {
+      let interval = setInterval(() => {
+        date = newDate.getTime();
+        if (date > nextDate) {
+          setDisplayTime((prev) => {
+            return prev - 1;
+          });
+        }
+        nextDate += second;
+      }, 30);
+      localStorage.clear();
+      localStorage.setItem("interval-id", interval);
+    }
+    if (timerOn) {
+      clearInterval(localStorage.getItem("interval-id"));
+    }
+    setTimerOn(!timerOn);
+  };
+  const resetTime = () => {
+    setDisplayTime(25 * 60);
+    setBreakTime(5 * 60);
+    setSessionTime(25 * 60);
+  };
+
   return (
     <div className="center-align">
       <h1>25+5 Clock</h1>
@@ -51,6 +89,12 @@ function App() {
         />
       </div>
       <h1>{formatTime(displayTime)}</h1>
+      <button className="play-pause" onClick={controlTime}>
+        {timerOn ? <i className="">Play</i> : <i className="">Reset</i>}
+      </button>
+      <button className="reset-btn" onClick={resetTime}>
+        Autorenew
+      </button>
     </div>
   );
 }
