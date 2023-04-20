@@ -72,21 +72,26 @@ function App() {
   return (
     <div className="center-align">
       <h1>25+5 Clock</h1>
-      <div className="dual-container">
+      <div className="dual-container" id="break-label">
+        Break Time
         <Length
+          id="break-length"
           title={"break-length"}
           changeTime={changeTime}
           type={"break"}
           time={breakTime}
           formatTime={formatTime}
         />
-        <Length
-          title={"session-length"}
-          changeTime={changeTime}
-          type={"session"}
-          time={sessionTime}
-          formatTime={formatTime}
-        />
+        <div id="session-label">
+          Session Time
+          <Length
+            title={"session-length"}
+            changeTime={changeTime}
+            type={"session"}
+            time={sessionTime}
+            formatTime={formatTime}
+          />
+        </div>
       </div>
       <h1>{formatTime(displayTime)}</h1>
       <button className="play-pause" onClick={controlTime}>
@@ -103,9 +108,13 @@ function Length({ title, changeTime, type, time, formatTime }) {
     <div>
       <h3>{title}</h3>
       <div className="time-sets">
-        <button onClick={() => changeTime(+60, type)}>+</button>
+        <button id="break-increment" onClick={() => changeTime(+60, type)}>
+          +
+        </button>
         <h3>{formatTime(time)}</h3>
-        <button onClick={() => changeTime(-60, type)}>-</button>
+        <button id="break-decrement" onClick={() => changeTime(-60, type)}>
+          -
+        </button>
       </div>
     </div>
   );
